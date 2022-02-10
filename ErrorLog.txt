@@ -1,0 +1,6 @@
+[11/20/11 9:12 AM]|Teller|createTransaction|Error|NOTAG|null<Transaction Creation Failure: Unrecognized transaction java.lang.NullPointerException>
+[11/20/11 9:15 AM]|Teller|createTransaction|Error|NOTAG|null<Transaction Creation Failure: Unrecognized transaction java.lang.NullPointerException>
+[11/20/11 9:22 AM]|DepositTransaction|Transaction|Error|NOTAG|null<Could not find any accounts for 1>
+[2/9/22, 9:25 PM]|JDBCBroker|JDBCBroker|Error|NOTAG|null<Could not load driver class[com.mysql.jdbc.Driver]>
+[2/10/22 1:01 PM]|JDBCBroker|JDBCBroker|Error|NOTAG|null<Could not load driver class[com.mysql.jdbc.Driver]>
+[2/10/22 1:06 PM]|JDBCBroker|JDBCBroker|Error|NOTAG|null<Could not load driver class[com.mysql.jdbc.Driver]>
