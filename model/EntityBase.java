@@ -1,6 +1,7 @@
+
 // tabs=4
 //************************************************************
-//	COPYRIGHT 2009 Sandeep Mitra and Michael Steves, The
+//	COPYRIGHT 2009/2015 Sandeep Mitra, Michael Steves and T M Rao, The
 //    College at Brockport, State University of New York. -
 //	  ALL RIGHTS RESERVED
 //
@@ -20,8 +21,8 @@ import java.util.Date;
 import java.util.Hashtable;
 import java.util.Properties;
 import java.util.Vector;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 
 // project imports
 import database.Persistable;
@@ -30,7 +31,8 @@ import impresario.IModel;
 import impresario.IView;
 import impresario.ISlideShow;
 import event.Event;
-import userinterface.MainFrame;
+import userinterface.MainStageContainer;
+import userinterface.View;
 import userinterface.WindowPosition;
 
 
@@ -38,7 +40,7 @@ import userinterface.WindowPosition;
  *  Persistable */
 //==============================================================
 public abstract class EntityBase extends Persistable
-	implements IModel, ISlideShow
+		implements IModel
 {
 	protected ModelRegistry myRegistry;	// registry for entities interested in our events
 	private int referenceCount;		// the number of others using us
@@ -46,10 +48,13 @@ public abstract class EntityBase extends Persistable
 	protected Properties persistentState;	// the field names and values from the database
 	private String myTableName;				// the name of our database table
 
-	protected Hashtable myViews;
-	protected JFrame myFrame;
+	protected Hashtable<String, Scene> myViews;
+	protected Stage myStage;
 
 	protected Properties mySchema;
+
+	protected EntityBase() {
+	}
 
 	// forward declarations
 	public abstract Object getState(String key);
@@ -60,8 +65,9 @@ public abstract class EntityBase extends Persistable
 	//----------------------------------------------------------
 	protected EntityBase(String tablename)
 	{
-		myFrame = MainFrame.getInstance();
-		myViews = new Hashtable();
+		System.out.println(tablename);
+		myStage = MainStageContainer.getInstance();
+		myViews = new Hashtable<String, Scene>();
 
 		// save our table name for later
 		myTableName = tablename;
@@ -79,7 +85,7 @@ public abstract class EntityBase extends Persistable
 		referenceCount = 0;
 		// indicate the data in persistentState matches the database contents
 		dirty = false;
-    }
+	}
 
 	/** Register objects to receive state updates. */
 	//----------------------------------------------------------
@@ -100,146 +106,50 @@ public abstract class EntityBase extends Persistable
 	}
 
 
-    //-----------------------------------------------------------------------------------
-    // package level permission, only ObjectFactory should modify
-    void incrementReferenceCount()
-    {
+	//-----------------------------------------------------------------------------------
+	// package level permission, only ObjectFactory should modify
+	void incrementReferenceCount()
+	{
 		referenceCount++;
-    }
-
-    //-----------------------------------------------------------------------------------
-    // package level permission, only ObjectFactory should modify
-    void decrementReferenceCount()
-    {
-		referenceCount--;
-    }
-
-    //-----------------------------------------------------------------------------------
-    // package level permission, only ObjectFactory should modify
-    int getReferenceCount()
-    {
-		return referenceCount;
-    }
+	}
 
 	//-----------------------------------------------------------------------------------
-    // package level permission, only ObjectFactory and others in same package should invoke
-    void releaseAggregates()
-    {
-    }
-
-	//----------------------------------------------------------
-	protected String convertToDefaultDateFormat(Date theDate)
+	// package level permission, only ObjectFactory should modify
+	void decrementReferenceCount()
 	{
-
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
-
-		String valToReturn = formatter.format(theDate);
-
-		return valToReturn;
-
+		referenceCount--;
 	}
 
-	//----------------------------------------------------------
-	protected String convertDateStringToDefaultDateFormat(String dateStr)
+	//-----------------------------------------------------------------------------------
+	// package level permission, only ObjectFactory should modify
+	int getReferenceCount()
 	{
-
-		Date theDate = validateDateString(dateStr);
-
-		if (theDate == null)
-		{
-			return null;
-		}
-		else
-		{
-			SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
-
-			String valToReturn = formatter.format(theDate);
-
-			return valToReturn;
-		}
+		return referenceCount;
 	}
 
-	//----------------------------------------------------------
-	protected Date validateDateString(String str)
+	//-----------------------------------------------------------------------------------
+	// package level permission, only ObjectFactory and others in same package should invoke
+	void releaseAggregates()
 	{
-			SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
-
-			Date theDate = null;
-
-			try
-			{
-				theDate = formatter.parse(str);
-				return theDate;
-			}
-			catch (ParseException ex)
-			{
-				SimpleDateFormat formatter2 =
-					new SimpleDateFormat("yyyy-MM-dd");
-
-				try
-				{
-					theDate = formatter2.parse(str);
-					return theDate;
-				}
-				catch (ParseException ex2)
-				{
-					SimpleDateFormat formatter3 =
-						new SimpleDateFormat("yyyy/MMdd");
-
-					try
-					{
-						theDate = formatter3.parse(str);
-						return theDate;
-					}
-					catch (ParseException ex3)
-					{
-						SimpleDateFormat formatter4 =
-							new SimpleDateFormat("yyyyMM/dd");
-
-						try
-						{
-							theDate = formatter4.parse(str);
-							return theDate;
-						}
-						catch (ParseException ex4)
-						{
-							return null;
-						}
-					}
-				}
-			}
 	}
-
 
 	//-----------------------------------------------------------------------------
-	public void swapToView(IView otherView)
+	public void swapToView(Scene otherView)
 	{
 
 		if (otherView == null)
 		{
 			new Event(Event.getLeafLevelClassName(this), "swapToView",
-				"Missing view for display ", Event.ERROR);
+					"Missing view for display ", Event.ERROR);
 			return;
 		}
 
-		if (otherView instanceof JPanel)
-		{
-			JPanel currentView = (JPanel)myFrame.getContentPane().getComponent(0);
-			// and remove it
-			myFrame.getContentPane().remove(currentView);
-			// add our view
-			myFrame.getContentPane().add((JPanel)otherView);
-			//pack the frame and show it
-			myFrame.pack();
-			//Place in center
-			WindowPosition.placeCenter(myFrame);
-		}//end of SwapToView
-		else
-		{
-			new Event(Event.getLeafLevelClassName(this), "swapToView",
-				"Non-displayable view object sent ", Event.ERROR);
-		}
+		myStage.setScene(otherView);
+		myStage.sizeToScene();
+
+		//Place in center
+		WindowPosition.placeCenter(myStage);
+
 	}
 
 }
-

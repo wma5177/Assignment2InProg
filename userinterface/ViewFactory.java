@@ -7,6 +7,55 @@ public class ViewFactory {
 
 	public static View createView(String viewName, IModel model)
 	{
+		if(viewName.equals("LibrarianView") == true) {
+			return new LibrarianView(model);
+		}
+		else if(viewName.equals("InsertPatronView") == true)
+		{
+			return new InsertPatronView(model);
+		}
+		else if(viewName.equals("InsertBookView") == true)
+		{
+			return new InsertBookView(model);
+		}
+		else if(viewName.equals("BookSearchView") == true)
+		{
+			return new BookSearchView(model);
+		}
+		else if (viewName.equals("StudentSearchView") == true)
+		{
+			return new StudentSearchView(model);
+		}
+		else
+			return null;
+	}
+
+
+	/*
+	public static Vector createVectorView(String viewName, IModel model)
+	{
+		if(viewName.equals("SOME VIEW NAME") == true)
+		{
+			//return [A NEW VECTOR VIEW OF THAT NAME TYPE]
+		}
+		else
+			return null;
+	}
+	*/
+
+}
+
+/*
+
+package userinterface;
+
+import impresario.IModel;
+
+//==============================================================================
+public class ViewFactory {
+
+	public static View createView(String viewName, IModel model)
+	{
 		if(viewName.equals("TellerView") == true)
 		{
 			return new TellerView(model);
@@ -78,6 +127,8 @@ public class ViewFactory {
 		else
 			return null;
 	}
-	*/
+
 
 }
+
+*/
