@@ -1,3 +1,5 @@
+
+
 // specify the package
 package userinterface;
 
@@ -19,7 +21,6 @@ import javafx.scene.text.TextAlignment;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.EventObject;
 import java.util.Properties;
 
 // project imports
@@ -65,10 +66,9 @@ public class InsertPatronView extends View
         // create our GUI components, add them to this Container
         container.getChildren().add(createFormContent());
 
-        //fix this later
-        //container.getChildren().add(createStatusLog("             "));
+        container.getChildren().add(createStatusLog("             "));
 
-        container.getChildren().add(container);
+        getChildren().add(container);
 
         populateFields();
 
@@ -262,6 +262,50 @@ public class InsertPatronView extends View
         return vbox;
     }
 
+    private void processAction(ActionEvent e) {
+
+        clearErrorMessage();
+
+        String banid = bannerId.getText();
+        String first = firstName.getText();
+        String last = lastName.getText();
+        String phone = contactPhone.getText();
+        String eml = email.getText();
+        String borrowerStat = (String)borrowerStatus.getValue();
+        String dateOfLatest = dateOfLatestBorrowerStatus.getText();
+        String dateOfReg = dateOfRegistration.getText();
+        String note = notes.getText();
+        String stat = (String)status.getValue();
+
+        Properties p2 = new Properties();
+
+        p2.setProperty("bannerId",banid);
+        p2.setProperty("firstName", first);
+        p2.setProperty("lastName", last);
+        p2.setProperty("contactPhone", phone);
+        p2.setProperty("email", eml);
+        p2.setProperty("borrowerStatus", borrowerStat);
+        p2.setProperty("dateOfLatestBorrowerStatus", dateOfLatest);
+        p2.setProperty("dateOfRegistration", dateOfReg);
+        p2.setProperty("notes", note);
+        p2.setProperty("status", stat);
+
+        if (banid.length() != 9){
+            databaseErrorBarcode();
+        }else {
+            myModel.stateChangeRequest("AddStudent", p2);
+        }
+
+        bannerId.clear();
+        firstName.clear();
+        lastName.clear();
+        contactPhone.clear();
+        email.clear();
+        notes.clear();
+        borrowerStatus.setValue("Good Standing");
+        status.setValue("Active");
+
+    }
 
 
     // Create the status log field
@@ -344,50 +388,6 @@ public class InsertPatronView extends View
         alert.showAndWait();
     }
 
-
-    @Override
-    protected void processAction(EventObject e) {
-        clearErrorMessage();
-
-        String banid = bannerId.getText();
-        String first = firstName.getText();
-        String last = lastName.getText();
-        String phone = contactPhone.getText();
-        String eml = email.getText();
-        String borrowerStat = (String)borrowerStatus.getValue();
-        String dateOfLatest = dateOfLatestBorrowerStatus.getText();
-        String dateOfReg = dateOfRegistration.getText();
-        String note = notes.getText();
-        String stat = (String)status.getValue();
-
-        Properties p2 = new Properties();
-
-        p2.setProperty("bannerId",banid);
-        p2.setProperty("firstName", first);
-        p2.setProperty("lastName", last);
-        p2.setProperty("contactPhone", phone);
-        p2.setProperty("email", eml);
-        p2.setProperty("borrowerStatus", borrowerStat);
-        p2.setProperty("dateOfLatestBorrowerStatus", dateOfLatest);
-        p2.setProperty("dateOfRegistration", dateOfReg);
-        p2.setProperty("notes", note);
-        p2.setProperty("status", stat);
-
-        if (banid.length() != 9){
-            databaseErrorBarcode();
-        }else {
-            myModel.stateChangeRequest("AddStudent", p2);
-        }
-
-        bannerId.clear();
-        firstName.clear();
-        lastName.clear();
-        contactPhone.clear();
-        email.clear();
-        notes.clear();
-        borrowerStatus.setValue("Good Standing");
-        status.setValue("Active");
-    }
 }
 
 

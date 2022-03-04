@@ -16,10 +16,9 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
-import java.util.EventObject;
 import java.util.Properties;
 
-public class InsertBookView<pubilc> extends View{
+public class InsertBookView extends View{
     // GUI components
     protected TextField barcode;
     protected TextField title;
@@ -59,9 +58,9 @@ public class InsertBookView<pubilc> extends View{
         // create our GUI components, add them to this Container
         container.getChildren().add(createFormContent());
 
-        //container.getChildren().add(createStatusLog("             "));
+        container.getChildren().add(createStatusLog("             "));
 
-        container.getChildren().add(container);
+        getChildren().add(container);
 
         populateFields();
 
@@ -278,7 +277,6 @@ public class InsertBookView<pubilc> extends View{
         return vbox;
     }
 
-    /*
     private void processAction(ActionEvent e) {
 
         clearErrorMessage();
@@ -339,8 +337,6 @@ public class InsertBookView<pubilc> extends View{
         suggestedPrice.setText("0.00");
 
     }
-
-     */
 
 
     // Create the status log field
@@ -422,257 +418,8 @@ public class InsertBookView<pubilc> extends View{
 
         alert.showAndWait();
     }
-
-    @Override
-    protected void processAction(EventObject evt) {
-        clearErrorMessage();
-
-        String bar = barcode.getText();
-        String titl = title.getText();
-        String disi = " ";
-        String au1 = author1.getText();
-        String au2 = author2.getText();
-        String au3 = author3.getText();
-        String au4 = author4.getText();
-        String publi = publisher.getText();
-        String yeaO = yearOfPublication.getText();
-        String isb = isbn.getText();
-        String condi = (String) quality.getValue();
-        String sugPric = suggestedPrice.getText();
-        String no = notes.getText();
-        String sta = (String) status.getValue();
-
-        Properties p2 = new Properties();
-
-        p2.setProperty("barcode", bar);
-        p2.setProperty("title", titl);
-        p2.setProperty("discipline", disi);
-        p2.setProperty("author1", au1);
-        p2.setProperty("author2", au2);
-        p2.setProperty("author3", au3);
-        p2.setProperty("author4", au4);
-        p2.setProperty("publisher", publi);
-        p2.setProperty("yearOfPublication", yeaO);
-        p2.setProperty("isbn", isb);
-        p2.setProperty("quality", condi);
-        p2.setProperty("suggestedPrice", sugPric);
-        p2.setProperty("notes", no);
-        p2.setProperty("status", sta);
-
-        if (yeaO == null || yeaO == "" || yeaO.length() == 0 || yeaO.length() > 4 ||
-                bar.length() != 6){
-            databaseErrorYear();
-        }else {
-            myModel.stateChangeRequest("InsertBook", p2);
-        }
-
-        barcode.clear();
-        title.clear();
-        author1.clear();
-        author2.clear();
-        author3.clear();
-        author4.clear();
-        publisher.clear();
-        yearOfPublication.clear();
-        isbn.clear();
-        suggestedPrice.clear();
-        notes.clear();
-
-        quality.setValue("Good");
-        status.setValue("Active");
-        suggestedPrice.setText("0.00");
-
-    }
 }
 
 //---------------------------------------------------------------
 //	Revision History:
 //
-
-
-
-/*
-package userinterface;
-
-import java.awt.*;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.JButton;
-import java.util.EventObject;
-
-import impresario.IModel;
-
-public class InsertBookView<ComboBox> extends View {
-    protected JTextField bookBarcode;
-    protected JTextField bookTitle;
-    protected JTextField bookAuthor;
-    protected JTextField bookPublisher;
-    protected JTextField bookYearPublished;
-    protected JTextField isbn;
-    protected JTextField suggestedPrice;
-
-    protected ComboBox status;
-
-    protected JButton cancelButton;
-    protected JButton submitButton;
-
-    //for error messaging
-    protected MessageView statusLog;
-
-
-    public InsertBookView(IModel model, String classname) {
-        super(model, classname);
-
-        //set the layout for this panel
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-
-        //create GUI components, adding them to the panel
-        add(createTitle());
-        add(createDataEntryFields());
-        add(createNavigationButtons());
-
-        //Error message area
-        add(createStatusLog("                  "));
-
-        //populateDataFields();
-
-    }
-
-    public InsertBookView(IModel model, String classname) {
-        super(model, classname);
-    }
-
-    private JPanel createTitle() {
-        JPanel container = new JPanel();
-        container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
-        container.add(Box.createRigidArea(new Dimension(250, 10)));
-
-        JPanel temp_1 = new JPanel();
-        temp_1.setLayout(new FlowLayout(FlowLayout.CENTER));
-
-        JLabel lbl_1 = new JLabel("     Library Project      ");
-        Font myFont_1 = new Font("Helvetica", Font.BOLD, 18);
-        lbl_1.setFont(myFont_1);
-        temp_1.add(lbl_1);
-
-        container.add(temp_1);
-
-        JPanel temp = new JPanel();
-        temp.setLayout(new FlowLayout(FlowLayout.CENTER));
-
-        String title = "BOOK INFORMATION";
-        JLabel lbl = new JLabel(title);
-        Font myFont = new Font("Helvetica", Font.BOLD, 15);
-        lbl.setFont(myFont);
-        temp.add(lbl);
-
-        container.add(temp);
-        return container;
-    }
-    protected JPanel createDataEntryFields(){
-        JPanel temp = new JPanel();
-        temp.setLayout(new BoxLayout(temp, BoxLayout.Y_AXIS));
-
-        temp.add(Box.createRigidArea(new Dimension(0, 20)));
-
-        JPanel temp0 = new JPanel();
-        temp0.setLayout(new FlowLayout(FlowLayout.LEFT));
-
-        JLabel bookAuthorLabel = new JLabel("  Author Name: ");
-        Font myFont = new Font("Helvetica", Font.BOLD, 12);
-        bookAuthorLabel.setFont(myFont);
-        temp0.add(bookAuthorLabel);
-
-        bookAuthor = new JTextField(20);
-        bookAuthor = setEditable(false);
-        temp0.add(bookAuthor);
-
-        temp.add(temp0);
-
-        JPanel temp1 = new JPanel();
-        temp1.setLayout(new FlowLayout(FlowLayout.LEFT));
-
-        JLabel bookTitleLabel = new JLabel("  Book Title:     ");
-        temp1.add(bookTitleLabel);
-
-        bookTitle = new JTextField(20);
-        bookTitle.setEditable(false);
-        temp1.add(bookTitle);
-
-        temp.add(temp1);
-
-        JPanel temp2 = new JPanel();
-        temp2.setLayout(new FlowLayout(FlowLayout.LEFT));
-
-        JLabel bookYearPublishedLabel = new JLabel("  Book Year Published:     ");
-        temp2.add(bookYearPublishedLabel);
-
-        bookYearPublished = new JTextField(20);
-        bookYearPublished.setEditable(false);
-        temp2.add(bookYearPublished);
-
-        temp.add(temp2);
-
-        return(temp);
-    }
-
-    protected JPanel createNavigationButtons(){
-        JPanel temp = new JPanel();
-
-        temp.setLayout(new BoxLayout(temp, BoxLayout.Y_AXIS));
-        temp.add(Box.createRigidArea(new Dimension(0,10)));
-
-        JPanel temp1 = new JPanel();
-        FlowLayout f1 = new FlowLayout(FlowLayout.CENTER);
-        f1.setVgap(1);
-        f1.setHgap(25);
-        temp1.setLayout(f1);
-
-        //buttons
-        cancelButton = new JButton("Cancel");
-        cancelButton.addActionListener(this);
-        temp1.add(cancelButton);
-
-        temp.add(temp1);
-
-        return(temp);
-
-    }
-
-    protected JPanel createStatusLog(String initialMessage){
-
-        statusLog = new MessageView(initialMessage);
-        return statusLog;
-    }
-
-    public void populateFields(){
-
-    }
-
-    @Override
-    public void updateState(String key, Object value) {
-        clearErrorMessage();
-
-        if (key.equals("Transaction") == true) {
-            displayErrorMessage((String)value);
-        }
-    }
-
-    public void displayErrorMessage(String message){
-        statusLog.displayErrorMessage(message);
-    }
-
-    public void clearErrorMessage(){
-        statusLog.clearErrorMessage();
-    }
-
-    @Override
-    protected void processAction(EventObject evt) {
-
-    }
-}
-
- */
