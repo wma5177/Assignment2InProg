@@ -71,8 +71,6 @@ public abstract class View extends Group
 
 	protected abstract void processAction(EventObject evt);
 
-	//----------------------------------------------------------
-	protected abstract void processUserIDAndPassword(String useridString,
-													 String passwordString);
+
 }
 

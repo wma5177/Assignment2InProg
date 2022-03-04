@@ -16,6 +16,7 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
+import java.util.EventObject;
 import java.util.Properties;
 
 public class InsertBookView extends View{
@@ -277,66 +278,6 @@ public class InsertBookView extends View{
         return vbox;
     }
 
-    private void processAction(ActionEvent e) {
-
-        clearErrorMessage();
-
-        String bar = barcode.getText();
-        String titl = title.getText();
-        String disi = " ";
-        String au1 = author1.getText();
-        String au2 = author2.getText();
-        String au3 = author3.getText();
-        String au4 = author4.getText();
-        String publi = publisher.getText();
-        String yeaO = yearOfPublication.getText();
-        String isb = isbn.getText();
-        String condi = (String) quality.getValue();
-        String sugPric = suggestedPrice.getText();
-        String no = notes.getText();
-        String sta = (String) status.getValue();
-
-        Properties p2 = new Properties();
-
-        p2.setProperty("barcode", bar);
-        p2.setProperty("title", titl);
-        p2.setProperty("discipline", disi);
-        p2.setProperty("author1", au1);
-        p2.setProperty("author2", au2);
-        p2.setProperty("author3", au3);
-        p2.setProperty("author4", au4);
-        p2.setProperty("publisher", publi);
-        p2.setProperty("yearOfPublication", yeaO);
-        p2.setProperty("isbn", isb);
-        p2.setProperty("quality", condi);
-        p2.setProperty("suggestedPrice", sugPric);
-        p2.setProperty("notes", no);
-        p2.setProperty("status", sta);
-
-        if (yeaO == null || yeaO == "" || yeaO.length() == 0 || yeaO.length() > 4 ||
-                bar.length() != 6){
-            databaseErrorYear();
-        }else {
-            myModel.stateChangeRequest("InsertBook", p2);
-        }
-
-        barcode.clear();
-        title.clear();
-        author1.clear();
-        author2.clear();
-        author3.clear();
-        author4.clear();
-        publisher.clear();
-        yearOfPublication.clear();
-        isbn.clear();
-        suggestedPrice.clear();
-        notes.clear();
-
-        quality.setValue("Good");
-        status.setValue("Active");
-        suggestedPrice.setText("0.00");
-
-    }
 
 
     // Create the status log field
@@ -417,6 +358,66 @@ public class InsertBookView extends View{
         alert.setContentText("Cannot add to database. Check year/barcode.");
 
         alert.showAndWait();
+    }
+
+    @Override
+    protected void processAction(EventObject evt) {
+        clearErrorMessage();
+
+        String bar = barcode.getText();
+        String titl = title.getText();
+        String disi = " ";
+        String au1 = author1.getText();
+        String au2 = author2.getText();
+        String au3 = author3.getText();
+        String au4 = author4.getText();
+        String publi = publisher.getText();
+        String yeaO = yearOfPublication.getText();
+        String isb = isbn.getText();
+        String condi = (String) quality.getValue();
+        String sugPric = suggestedPrice.getText();
+        String no = notes.getText();
+        String sta = (String) status.getValue();
+
+        Properties p2 = new Properties();
+
+        p2.setProperty("barcode", bar);
+        p2.setProperty("title", titl);
+        p2.setProperty("discipline", disi);
+        p2.setProperty("author1", au1);
+        p2.setProperty("author2", au2);
+        p2.setProperty("author3", au3);
+        p2.setProperty("author4", au4);
+        p2.setProperty("publisher", publi);
+        p2.setProperty("yearOfPublication", yeaO);
+        p2.setProperty("isbn", isb);
+        p2.setProperty("quality", condi);
+        p2.setProperty("suggestedPrice", sugPric);
+        p2.setProperty("notes", no);
+        p2.setProperty("status", sta);
+
+        if (yeaO == null || yeaO == "" || yeaO.length() == 0 || yeaO.length() > 4 ||
+                bar.length() != 6){
+            databaseErrorYear();
+        }else {
+            myModel.stateChangeRequest("InsertBook", p2);
+        }
+
+        barcode.clear();
+        title.clear();
+        author1.clear();
+        author2.clear();
+        author3.clear();
+        author4.clear();
+        publisher.clear();
+        yearOfPublication.clear();
+        isbn.clear();
+        suggestedPrice.clear();
+        notes.clear();
+
+        quality.setValue("Good");
+        status.setValue("Active");
+        suggestedPrice.setText("0.00");
     }
 }
 

@@ -174,7 +174,7 @@ public class LibrarianView extends View
         }
         else
         {
-            processUserIDAndPassword(useridEntered, passwordEntered);
+            //processUserIDAndPassword(useridEntered, passwordEntered);
         }
     }
 
@@ -183,6 +183,7 @@ public class LibrarianView extends View
      * Action is to pass this info on to the teller object
      */
     //----------------------------------------------------------
+    /*
     @Override
     protected void processUserIDAndPassword(String useridString,
                                             String passwordString)
@@ -202,6 +203,8 @@ public class LibrarianView extends View
             databaseError();
         }
     }
+
+     */
 
     //---------------------------------------------------------
 
