@@ -1,6 +1,6 @@
 // tabs=4
 //************************************************************
-//	COPYRIGHT 2010 Sandeep Mitra and Students, The
+//	COPYRIGHT 2010/2015 Sandeep Mitra and Students, The
 //    College at Brockport, State University of New York. -
 //	  ALL RIGHTS RESERVED
 //
@@ -13,68 +13,39 @@
 package userinterface;
 
 // system imports
-import java.awt.BorderLayout;
-import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Color;
-import java.awt.Dimension;
-import javax.swing.BoxLayout;
-import javax.swing.JPanel;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.TextAlignment;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
 // project imports
 
 //==============================================================
-public class MessageView extends JPanel
+public class MessageView extends Text
 {
-
-	// GUI elements
-	private JLabel statusLog;
-
-	private final int statusLogHeight = 30;
-	private final int statusLogWidth = 60;
-
 
 	// Class constructor
 	//----------------------------------------------------------
 	public MessageView(String initialMessage)
 	{
-		setLayout(new FlowLayout(FlowLayout.LEFT));
-
-		add(createStatusLog(initialMessage));
-
-	}
-
-
-	// Overide the paint method to ensure we can set the focus when made visible
-	//-------------------------------------------------------------
-	public void paint(Graphics g)
-	{
-		super.paint(g);
-	}
-
-
-
-	// Create the composite ID text entry field
-	//-------------------------------------------------------------
-	private JPanel createStatusLog(String initialMessage)
-	{
-		JPanel temp = new JPanel();		// default FlowLayout is fine
-		temp.setLayout(new FlowLayout(FlowLayout.LEFT));
-
-		statusLog = new JLabel(initialMessage);
-		statusLog.setMinimumSize(new Dimension(statusLogHeight, statusLogWidth));
-		Font myFont = new Font("Helvetica", Font.BOLD, 16);
-		statusLog.setFont(myFont);
-		statusLog.setForeground(Color.blue);
-  		temp.add(statusLog);
-
-		return temp;
+		super(initialMessage);
+		setFont(Font.font("Helvetica", FontWeight.BOLD, 16));
+		setFill(Color.BLUE);
+		setTextAlignment(TextAlignment.LEFT);
 	}
 
 	/**
@@ -84,8 +55,8 @@ public class MessageView extends JPanel
 	public void displayMessage(String message)
 	{
 		// display the passed text in red
-		statusLog.setForeground(Color.blue);
-		statusLog.setText(message);
+		setFill(Color.BLUE);
+		setText(message);
 	}
 
 	/**
@@ -95,8 +66,8 @@ public class MessageView extends JPanel
 	public void displayErrorMessage(String message)
 	{
 		// display the passed text in red
-		statusLog.setForeground(Color.red);
-		statusLog.setText(message);
+		setFill(Color.RED);
+		setText(message);
 	}
 
 	/**
@@ -105,7 +76,7 @@ public class MessageView extends JPanel
 	//----------------------------------------------------------
 	public void clearErrorMessage()
 	{
-		statusLog.setText("                           ");
+		setText("                           ");
 	}
 
 

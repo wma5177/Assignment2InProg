@@ -5,32 +5,29 @@ import impresario.IModel;
 //==============================================================================
 public class ViewFactory {
 
-	public static View createView(String viewName, IModel model)
-	{
-		if(viewName.equals("LibrarianView") == true) {
+	public static View createView(String viewName, IModel model) {
+		if (viewName.equals("LibrarianView") == true) {
 			return new LibrarianView(model);
-		}
-		else if(viewName.equals("InsertPatronView") == true)
-		{
+		} else if (viewName.equals("InsertPatronView") == true) {
 			return new InsertPatronView(model);
-		}
-		else if(viewName.equals("InsertBookView") == true)
-		{
+		} else if (viewName.equals("InsertBookView") == true) {
 			return new InsertBookView(model);
-		}
-		else if(viewName.equals("BookSearchView") == true)
-		{
+		} else if (viewName.equals("SearchBookView") == true) {
 			return new BookSearchView(model);
-		}
-		else if (viewName.equals("StudentSearchView") == true)
-		{
+		} else if (viewName.equals("SearchPatronView") == true) {
 			return new StudentSearchView(model);
-		}
-		else
+		} else if (viewName.equals("BookCollectionView")) {
+			//return new BookCollectionView(model);
+		} else if (viewName.equals("PatronCollectionView")) {
+			//return new PatronCollectionView(model);
+		} else {
 			return null;
+
+		}
+
+		return null;
 	}
-
-
+}
 	/*
 	public static Vector createVectorView(String viewName, IModel model)
 	{
@@ -43,7 +40,7 @@ public class ViewFactory {
 	}
 	*/
 
-}
+
 
 /*
 

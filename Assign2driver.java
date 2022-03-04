@@ -51,7 +51,6 @@ public class Assign2driver extends Application
     public void start(Stage primaryStage)
     {
         System.out.println("Library");
-        System.out.println("Copyright 2022 Matt Warren and Kyle Knopp");
 
         // Create the top-level container (main frame) and add contents to it.
         MainStageContainer.setStage(primaryStage, "Library");
@@ -59,12 +58,7 @@ public class Assign2driver extends Application
 
         // Finish setting up the stage (ENABLE THE GUI TO BE CLOSED USING THE TOP RIGHT
         // 'X' IN THE WINDOW), and show it.
-        mainStage.setOnCloseRequest(new EventHandler <javafx.stage.WindowEvent>() {
-            @Override
-            public void handle(javafx.stage.WindowEvent event) {
-                System.exit(0);
-            }
-        });
+        mainStage.setOnCloseRequest(event -> System.exit(0));
 
         try
         {
